@@ -126,14 +126,14 @@ class Platformer extends Phaser.Scene {
         this.smokeEmitter = this.add.particles(0, 0, 'smoke', {
             speed: { min: -20, max: 20 },
             lifespan: 300,
-            scale: { start: 0.1, end: 0 },
+            scale: { start: 0.07, end: 0 },
             emitting: false // 'on: false' is now 'emitting: false'
         });
         
         this.starEmitter = this.add.particles(0, 0, 'star', {
             speed: { min: -50, max: -100 },
             lifespan: 400,
-            scale: { start: 0.5, end: 0 },
+            scale: { start: 0.1, end: 0 },
             emitting: false
         });
         
@@ -144,8 +144,8 @@ class Platformer extends Phaser.Scene {
             this.player.body.setAccelerationX(-this.ACCELERATION);
             this.player.resetFlip();
             this.player.anims.play('walk', true);
-            this.smokeEmitter.setPosition(this.player.x + 10, this.player.y + 20);
-            this.smokeEmitter.explode(3);
+            this.smokeEmitter.setPosition(this.player.x + 10, this.player.y + 10);
+            this.smokeEmitter.explode(5);
             
         } else if(this.cursors.right.isDown) {
             this.player.body.setAccelerationX(this.ACCELERATION);
