@@ -46,6 +46,17 @@ class Last extends Phaser.Scene {
             key: "tilemap_sheet",
             frame: 112
         });        
+
+        // Create group to manage all meteors
+        this.meteorGroup = this.physics.add.group();
+
+        // Spawn meteors every 2 seconds
+        this.time.addEvent({
+            delay: 2000, // milliseconds
+            callback: this.spawnMeteor,
+            callbackScope: this,
+            loop: true
+        });
         
 
         this.physics.world.enable(this.coins, Phaser.Physics.Arcade.STATIC_BODY);
@@ -65,6 +76,10 @@ class Last extends Phaser.Scene {
         
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.player.setCollideWorldBounds(true);
+
+        this.physics.add.overlap(this.player, this.meteorGroup, (player, meteor) => {
+            meteor.destroy();
+        });
 
         
 
@@ -148,17 +163,35 @@ class Last extends Phaser.Scene {
     
         if(!this.player.body.blocked.down) {
         this.player.anims.play('jump'); // Re-enable this
-    }
-    
-    if(this.player.body.blocked.down && Phaser.Input.Keyboard.JustDown(this.cursors.up)) {
-        this.player.body.setVelocityY(this.JUMP_VELOCITY);
-        this.starEmitter.setPosition(this.player.x, this.player.y + 20);
-        this.starEmitter.explode(5); // Emit 5 particles at once
-        this.jumpSound.play();
-    }
+        }
+        
+        if(this.player.body.blocked.down && Phaser.Input.Keyboard.JustDown(this.cursors.up)) {
+            this.player.body.setVelocityY(this.JUMP_VELOCITY);
+            this.starEmitter.setPosition(this.player.x, this.player.y + 20);
+            this.starEmitter.explode(5); // Emit 5 particles at once
+            this.jumpSound.play();
+        }
+
+        // Remove meteors that fall below the screen
+        this.meteorGroup.getChildren().forEach((meteor) => {
+            if (meteor.y > this.map.heightInPixels + 50) {
+                meteor.destroy();
+            }
+        });
 
    
 
+    }
+
+    spawnMeteor(){
+        const x = Phaser.Math.Between(0, this.map.widthInPixels);
+        const y = -50; // just above screen
+    
+        const meteor = this.meteorGroup.create(x, y, "meteor");
+        meteor.setVelocityY(100); // falls straight down
+        meteor.body.setAllowGravity(false);
+        meteor.setCollideWorldBounds(false);
+        meteor.setScale(0.05); // optional scaling
     }
 
 }

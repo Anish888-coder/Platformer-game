@@ -18,6 +18,9 @@ class Load extends Phaser.Scene {
         // Load tilemap information
         this.load.image("tilemap_tiles", "tilemap_packed.png");
 
+        //Load Meteor
+        this.load.image("meteor", "meteor.png");
+
         this.load.spritesheet("tilemap_sheet", "tilemap_packed.png", {
             frameWidth: 18,
             frameHeight: 18
@@ -35,6 +38,8 @@ class Load extends Phaser.Scene {
         
         this.load.image('smoke', "smoke_02.png");
         this.load.image('star', "star_05.png");
+
+        
 
 
     }

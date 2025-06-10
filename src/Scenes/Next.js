@@ -10,6 +10,7 @@ class Next extends Phaser.Scene {
         this.physics.world.gravity.y = 1500;
         this.JUMP_VELOCITY = -900;
         this.SCALE = 1.5;
+        this.check = false;
     }
 
     create() {
@@ -47,8 +48,31 @@ class Next extends Phaser.Scene {
             key: "tilemap_sheet",
             frame: 88
         });
+
+        this.pass = this.map.createFromObjects("Objects", {
+            name: "pass",
+            key: "tilemap_sheet",
+            frame: 88
+        });
+
+        this.checkpoint = this.map.createFromObjects("Objects", {
+            name: "checkpoint",
+            key: "tilemap_sheet",
+            frame: 112
+        });
+
         
-        
+        // Create group to manage all meteors
+        this.meteorGroup = this.physics.add.group();
+
+        // Spawn meteors every 2 seconds
+        this.time.addEvent({
+            delay: 2000, // milliseconds
+            callback: this.spawnMeteor,
+            callbackScope: this,
+            loop: true
+        });
+
 
         this.physics.world.enable(this.coins, Phaser.Physics.Arcade.STATIC_BODY);
         this.physics.world.enable(this.pass, Phaser.Physics.Arcade.STATIC_BODY);
@@ -60,6 +84,11 @@ class Next extends Phaser.Scene {
         // set up player avatar
         this.player = this.physics.add.sprite(25, 10, "platformer_characters", 0);
         
+        this.physics.add.overlap(this.player, this.meteorGroup, (player, meteor) => {
+            meteor.destroy();
+        });
+
+
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.player.setCollideWorldBounds(true);
 
@@ -78,6 +107,10 @@ class Next extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.pass, (obj1, obj2) => {
             //document.getElementById("restartButton").style.display = "block";
             this.scene.start("Last")
+        });
+
+        this.physics.add.overlap(this.player, this.pass, (obj1, obj2) => {
+            this.check = true;
         });
 
         /*
@@ -141,18 +174,34 @@ class Next extends Phaser.Scene {
     
         if(!this.player.body.blocked.down) {
         this.player.anims.play('jump'); // Re-enable this
-    }
+        }
     
-    if(this.player.body.blocked.down && Phaser.Input.Keyboard.JustDown(this.cursors.up)) {
-        this.player.body.setVelocityY(this.JUMP_VELOCITY);
-        this.starEmitter.setPosition(this.player.x, this.player.y + 20);
-        this.starEmitter.explode(5); // Emit 5 particles at once
-        this.jumpSound.play();
+        if(this.player.body.blocked.down && Phaser.Input.Keyboard.JustDown(this.cursors.up)) {
+            this.player.body.setVelocityY(this.JUMP_VELOCITY);
+            this.starEmitter.setPosition(this.player.x, this.player.y + 20);
+            this.starEmitter.explode(5); // Emit 5 particles at once
+            this.jumpSound.play();
+        }
+
+
+        // Remove meteors that fall below the screen
+        this.meteorGroup.getChildren().forEach((meteor) => {
+            if (meteor.y > this.map.heightInPixels + 50) {
+                meteor.destroy();
+            }
+        });
+
     }
 
-
-    ///end check    
-
+    spawnMeteor(){
+        const x = Phaser.Math.Between(0, this.map.widthInPixels);
+        const y = -50; // just above screen
+    
+        const meteor = this.meteorGroup.create(x, y, "meteor");
+        meteor.setVelocityY(120); // falls straight down
+        meteor.body.setAllowGravity(false);
+        meteor.setCollideWorldBounds(false);
+        meteor.setScale(0.1); // optional scaling
     }
 
 }
