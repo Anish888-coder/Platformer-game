@@ -29,7 +29,7 @@ class Load extends Phaser.Scene {
         // Particle images from png folder
         this.load.setPath("./assets/PNG (Transparent)/");
 
-        this.load.image("circle1", "circle_01.png");
+        //this.load.image("circle1", "circle_01.png");
         
         this.load.image('smoke', "smoke_02.png");
         this.load.image('star', "star_05.png");

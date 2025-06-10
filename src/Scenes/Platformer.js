@@ -76,9 +76,11 @@ class Platformer extends Phaser.Scene {
 
         // When player reaches the flag
         this.physics.add.overlap(this.player, this.flagA, (obj1, obj2) => {
-            document.getElementById("restartButton").style.display = "block";
+            //document.getElementById("restartButton").style.display = "block";
+            this.scene.start("Next");
         });
 
+        /*
         /// Only show restart when level is completed
         const restartBtn = document.getElementById("restartButton");
         restartBtn.replaceWith(restartBtn.cloneNode(true));  // Remove any previous listeners
@@ -88,6 +90,7 @@ class Platformer extends Phaser.Scene {
             newRestartBtn.style.display = "none";  // Hide the button again
             this.scene.restart();                  // Restart the level
         });
+        */
 
         
 
