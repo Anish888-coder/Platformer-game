@@ -39,3 +39,18 @@ const SCALE = 2.0;
 var my = {sprite: {}, text: {}};
 
 const game = new Phaser.Game(config);
+
+
+
+/* assests used for particles: 
+
+smoke_02.png
+spark_05.png
+spark_06.png
+spark_07.png
+star_01.png
+star_02.png
+star_03.png
+star_04.png
+star_05.png
+*/

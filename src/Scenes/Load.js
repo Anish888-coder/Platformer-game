@@ -24,6 +24,7 @@ class Load extends Phaser.Scene {
         });
         
         this.load.tilemapTiledJSON("platformer-level-1", "platform-level-1.json");
+        this.load.tilemapTiledJSON("Last", "Last.json");
 
 
         // Particle images from png folder
