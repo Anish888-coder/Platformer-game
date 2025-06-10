@@ -45,6 +45,9 @@ class Next extends Phaser.Scene {
         //jump sound
         this.jumpSound = this.sound.add('jump');
 
+        //game over sound
+        this.go = this.sound.add("gameOver");
+
         //checkpoint sound
         this.checkpointerSound = this.sound.add('checkpointer');
 
@@ -206,6 +209,8 @@ class Next extends Phaser.Scene {
             this.player.setTint(0xff0000);
             this.player.setVelocity(0);
             this.player.anims.play('idle');
+
+            this.go.play();
             
             this.add.text(this.player.x - 50, this.player.y - 50, "Game Over", {
                 fontSize: '32px',

@@ -40,6 +40,12 @@ class Last extends Phaser.Scene {
         //jump sound
         this.jumpSound = this.sound.add('jump');
 
+        //game over sound
+        this.go = this.sound.add("gameOver");
+
+        // level done sound
+        this.done = this.sound.add("complete");
+
         // Create a layer
         this.groundLayer = this.map.createLayer("Ground-n-Platforms", this.tileset, 0, 0);
         
@@ -118,6 +124,8 @@ class Last extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.flag, (obj1, obj2) => {
             if (!this.hasWon) {
                 this.hasWon = true;
+
+                this.done.play();
 
                 this.add.text(this.player.x - 150, this.player.y - 50, "You Win!", {
                     fontSize: '32px',
@@ -238,6 +246,8 @@ class Last extends Phaser.Scene {
                 fontSize: '32px',
                 fill: '#000000'
             });
+
+            this.go.play();
 
             this.scene.pause();
     
