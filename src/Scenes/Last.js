@@ -6,10 +6,11 @@ class Last extends Phaser.Scene {
     init() {
         // variables and settings
         this.ACCELERATION = 800;
-        this.DRAG = 700;    // DRAG < ACCELERATION = icy slide
+        this.DRAG = 800;    // DRAG < ACCELERATION = icy slide
         this.physics.world.gravity.y = 1000;
         this.JUMP_VELOCITY = -500;
         this.SCALE = 1.5;
+        this.dead = false;
     }
     
     create() {
@@ -33,6 +34,10 @@ class Last extends Phaser.Scene {
         this.groundLayer.setCollisionByProperty({
             collides: true
         });
+
+        this.waterLayer = this.map.createLayer("WaterLayer", this.tileset, 0, 0);
+        this.waterLayer.setCollisionByExclusion([-1]); // All tiles collide except empty
+
 
         
         this.coins = this.map.createFromObjects("Objects", {
@@ -79,6 +84,12 @@ class Last extends Phaser.Scene {
 
         this.physics.add.overlap(this.player, this.meteorGroup, (player, meteor) => {
             meteor.destroy();
+            //death
+        });
+
+        this.physics.add.collider(this.player, this.waterLayer, () => {
+            // death
+            console.log("died");
         });
 
         

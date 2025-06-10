@@ -6,11 +6,12 @@ class Next extends Phaser.Scene {
     init() {
         // variables and settings
         this.ACCELERATION = 800;
-        this.DRAG = 700;    // DRAG < ACCELERATION = icy slide
+        this.DRAG = 800;    // DRAG < ACCELERATION = icy slide
         this.physics.world.gravity.y = 1000;
         this.JUMP_VELOCITY = -500;
         this.SCALE = 1.5;
         this.check = false;
+        this.dead = false;
     }
 
     create() {
@@ -86,7 +87,10 @@ class Next extends Phaser.Scene {
         
         this.physics.add.overlap(this.player, this.meteorGroup, (player, meteor) => {
             meteor.destroy();
+            //death
+            console.log("died");
         });
+
 
 
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
@@ -109,23 +113,9 @@ class Next extends Phaser.Scene {
             this.scene.start("Last")
         });
 
-        this.physics.add.overlap(this.player, this.pass, (obj1, obj2) => {
+        this.physics.add.overlap(this.player, this.checkpoint, (obj1, obj2) => {
             this.check = true;
         });
-
-        /*
-        /// Only show restart when level is completed
-        const restartBtn = document.getElementById("restartButton");
-        restartBtn.replaceWith(restartBtn.cloneNode(true));  // Remove any previous listeners
-        const newRestartBtn = document.getElementById("restartButton");
-
-        newRestartBtn.addEventListener("click", () => {
-            newRestartBtn.style.display = "none";  // Hide the button again
-            this.scene.restart();                  // Restart the level
-        });
-        */
-
-        
 
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.cameras.main.startFollow(this.player, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY])
@@ -194,7 +184,7 @@ class Next extends Phaser.Scene {
     }
 
     spawnMeteor(){
-        const x = Phaser.Math.Between(0, this.map.widthInPixels);
+        const x = Phaser.Math.Between(50, this.map.widthInPixels);
         const y = -50; // just above screen
     
         const meteor = this.meteorGroup.create(x, y, "meteor");
