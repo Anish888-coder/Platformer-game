@@ -87,8 +87,7 @@ class Next extends Phaser.Scene {
         
         this.physics.add.overlap(this.player, this.meteorGroup, (player, meteor) => {
             meteor.destroy();
-            //death
-            console.log("died");
+            this.handleDeath();
         });
 
 
@@ -192,6 +191,23 @@ class Next extends Phaser.Scene {
         meteor.body.setAllowGravity(false);
         meteor.setCollideWorldBounds(false);
         meteor.setScale(0.1); // optional scaling
+    }
+
+
+    handleDeath() {
+        if (!this.dead) {
+            this.dead = true;
+            this.player.setTint(0xff0000);
+            this.player.setVelocity(0);
+            this.player.anims.play('idle');
+            this.add.text(this.player.x - 50, this.player.y - 50, "Game Over", {
+                fontSize: '32px',
+                fill: '#ffffff'
+            });
+    
+            const restartBtn = document.getElementById("restartButton");
+            restartBtn.style.display = "block";
+        }
     }
 
 }

@@ -306,6 +306,18 @@
                  "width":18,
                  "x":1243,
                  "y":198
+                }, 
+                {
+                 "gid":89,
+                 "height":18,
+                 "id":26,
+                 "name":"pass",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":18,
+                 "x":1238,
+                 "y":431
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -314,7 +326,7 @@
          "y":0
         }],
  "nextlayerid":3,
- "nextobjectid":26,
+ "nextobjectid":28,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

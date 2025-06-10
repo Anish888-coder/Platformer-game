@@ -11,6 +11,16 @@ class Last extends Phaser.Scene {
         this.JUMP_VELOCITY = -500;
         this.SCALE = 1.5;
         this.dead = false;
+        //this.inWaterTime = 0;
+       // this.waterDeathThreshold = 15000; // milliseconds
+        //this.waterYThreshold = 440;
+
+        //for water
+        this.inDangerZoneTime = 0;
+        this.dangerZoneThreshold = 1500; // milliseconds
+        this.yThreshold = 387;
+
+
     }
     
     create() {
@@ -77,19 +87,14 @@ class Last extends Phaser.Scene {
 
 
         // set up player avatar
-        this.player = this.physics.add.sprite(400, 300, "platformer_characters", 0);
+        this.player = this.physics.add.sprite(25, 10, "platformer_characters", 0);
         
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.player.setCollideWorldBounds(true);
 
         this.physics.add.overlap(this.player, this.meteorGroup, (player, meteor) => {
             meteor.destroy();
-            //death
-        });
-
-        this.physics.add.collider(this.player, this.waterLayer, () => {
-            // death
-            console.log("died");
+            this.handleDeath();
         });
 
         
@@ -190,7 +195,18 @@ class Last extends Phaser.Scene {
             }
         });
 
-   
+
+        if (this.player.y > this.yThreshold) {
+            this.inDangerZoneTime += this.game.loop.delta;
+            if (this.inDangerZoneTime >= this.dangerZoneThreshold) {
+                this.handleDeath();  // implement or call your death logic here
+            }
+        } else {
+            this.inDangerZoneTime = 0; // reset timer if player is safe
+        }
+        
+
+        
 
     }
 
@@ -204,4 +220,22 @@ class Last extends Phaser.Scene {
         meteor.setCollideWorldBounds(false);
         meteor.setScale(0.05); // optional scaling
     }
+
+
+    handleDeath() {
+        if (!this.dead) {
+            this.dead = true;
+            this.player.setTint(0xff0000);
+            this.player.setVelocity(0);
+            this.player.anims.play('idle');
+            this.add.text(this.player.x - 50, this.player.y - 50, "Game Over", {
+                fontSize: '32px',
+                fill: '#ffffff'
+            });
+    
+            const restartBtn = document.getElementById("restartButton");
+            restartBtn.style.display = "block";
+        }
+    }
+    
 }

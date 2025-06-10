@@ -306,6 +306,30 @@
                  "width":18,
                  "x":1241,
                  "y":179
+                }, 
+                {
+                 "gid":89,
+                 "height":18,
+                 "id":39,
+                 "name":"pass",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":18,
+                 "x":1241.66666666667,
+                 "y":432.333333333333
+                }, 
+                {
+                 "gid":89,
+                 "height":18,
+                 "id":40,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":18,
+                 "x":1349,
+                 "y":491
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -314,7 +338,7 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":39,
+ "nextobjectid":41,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
