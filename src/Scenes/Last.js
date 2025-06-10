@@ -7,8 +7,8 @@ class Last extends Phaser.Scene {
         // variables and settings
         this.ACCELERATION = 800;
         this.DRAG = 700;    // DRAG < ACCELERATION = icy slide
-        this.physics.world.gravity.y = 1500;
-        this.JUMP_VELOCITY = -900;
+        this.physics.world.gravity.y = 1000;
+        this.JUMP_VELOCITY = -500;
         this.SCALE = 1.5;
     }
     
@@ -193,5 +193,4 @@ class Last extends Phaser.Scene {
         meteor.setCollideWorldBounds(false);
         meteor.setScale(0.05); // optional scaling
     }
-
 }
