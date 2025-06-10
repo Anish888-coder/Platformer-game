@@ -7,8 +7,8 @@ class Platformer extends Phaser.Scene {
         // variables and settings
         this.ACCELERATION = 800;
         this.DRAG = 800;    // DRAG < ACCELERATION = icy slide
-        this.physics.world.gravity.y = 1500;
-        this.JUMP_VELOCITY = -900;
+        this.physics.world.gravity.y = 1000;
+        this.JUMP_VELOCITY = -500;
         this.SCALE = 1.5;
     }
 
@@ -28,6 +28,18 @@ class Platformer extends Phaser.Scene {
         // Create a layer
         this.groundLayer = this.map.createLayer("Ground-n-Platforms", this.tileset, 0, 0);
         
+        //Title Text
+        this.add.text(150, 150, "Welcome to Meteor Trouble by Anish Bansal", {
+            fontSize: '16px',
+            fill: '#ffffff'
+        });
+
+
+        //tutorial
+        this.add.text(150, 200, "Dodge meteors and don't stay in the water for too long!", {
+            fontSize: '16px',
+            fill: '#ffffff'
+        });
 
         // Make it collidable
         this.groundLayer.setCollisionByProperty({

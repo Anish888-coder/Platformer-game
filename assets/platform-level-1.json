@@ -130,18 +130,6 @@
                 {
                  "gid":152,
                  "height":18,
-                 "id":9,
-                 "name":"coin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":18,
-                 "x":703,
-                 "y":18
-                }, 
-                {
-                 "gid":152,
-                 "height":18,
                  "id":10,
                  "name":"coin",
                  "rotation":0,
@@ -318,18 +306,6 @@
                  "width":18,
                  "x":1241.66666666667,
                  "y":432.333333333333
-                }, 
-                {
-                 "gid":89,
-                 "height":18,
-                 "id":40,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":18,
-                 "x":1349,
-                 "y":491
                 }],
          "opacity":1,
          "type":"objectgroup",
