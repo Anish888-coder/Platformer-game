@@ -242,7 +242,7 @@ class Last extends Phaser.Scene {
             this.player.setTint(0xff0000);
             this.player.setVelocity(0);
             this.player.anims.play('idle');
-            this.add.text(this.player.x - 50, this.player.y - 50, "Game Over", {
+            this.add.text(this.player.x - 50, this.player.y - 100, "Game Over", {
                 fontSize: '32px',
                 fill: '#000000'
             });
