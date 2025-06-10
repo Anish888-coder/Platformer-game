@@ -10,8 +10,12 @@ class Next extends Phaser.Scene {
         this.physics.world.gravity.y = 1000;
         this.JUMP_VELOCITY = -500;
         this.SCALE = 1.5;
-        this.check = false;
+        //this.check = false;
         this.dead = false;
+        this.reachedCheckpoint = false;
+        this.checkpointX = 0;
+        this.checkpointY = 0;
+
     }
 
     create() {
@@ -50,16 +54,56 @@ class Next extends Phaser.Scene {
             frame: 88
         });
 
-        this.pass = this.map.createFromObjects("Objects", {
-            name: "pass",
-            key: "tilemap_sheet",
-            frame: 88
-        });
+        // set up player avatar
+        //this.player = this.physics.add.sprite(25, 10, "platformer_characters", 0);
+
+        //checkpoint
 
         this.checkpoint = this.map.createFromObjects("Objects", {
             name: "checkpoint",
             key: "tilemap_sheet",
             frame: 112
+        });
+
+        // Check if player should spawn at checkpoint or normal spawn
+        const checkpointReached = localStorage.getItem('checkpointReached') === 'true';
+        if (checkpointReached) {
+            const checkpointX = parseFloat(localStorage.getItem('checkpointX'));
+            const checkpointY = parseFloat(localStorage.getItem('checkpointY'));
+            this.player = this.physics.add.sprite(checkpointX, checkpointY, "platformer_characters", 0);
+            this.reachedCheckpoint = true;
+            this.checkpointX = checkpointX;
+            this.checkpointY = checkpointY;
+        } else {
+            // Normal spawn position
+            this.player = this.physics.add.sprite(25, 10, "platformer_characters", 0);
+        }
+
+        this.physics.world.enable(this.checkpoint, Phaser.Physics.Arcade.STATIC_BODY);
+        this.checkpointObj = this.checkpoint[0]; // assuming only one
+
+        // Checkpoint collision detection
+        this.physics.add.overlap(this.player, this.checkpointObj, () => {
+            if (!this.reachedCheckpoint) {
+                this.reachedCheckpoint = true;
+                // Store the checkpoint object's position, not player's current position
+                this.checkpointX = this.checkpointObj.x;
+                this.checkpointY = this.checkpointObj.y - 20; // Spawn slightly above the checkpoint
+                
+                // Save to localStorage immediately when checkpoint is reached
+                localStorage.setItem('checkpointReached', 'true');
+                localStorage.setItem('checkpointX', this.checkpointX);
+                localStorage.setItem('checkpointY', this.checkpointY);
+                
+                // Optional: Add visual feedback for reaching checkpoint
+                this.add.text(this.checkpointObj.x - 50, this.checkpointObj.y - 50, "Checkpoint!", {
+                    fontSize: '16px',
+                    fill: '#00ff00'
+                }).setDepth(100);
+                
+                // Make checkpoint glow or change appearance
+                this.checkpointObj.setTint(0x00ff00);
+            }
         });
 
         
@@ -82,12 +126,10 @@ class Next extends Phaser.Scene {
         // This will be used for collision detection below.
         this.coinGroup = this.add.group(this.coins);
 
-        // set up player avatar
-        this.player = this.physics.add.sprite(25, 10, "platformer_characters", 0);
         
         this.physics.add.overlap(this.player, this.meteorGroup, (player, meteor) => {
             meteor.destroy();
-            this.handleDeath();
+            this.handleDeath();        
         });
 
 
@@ -110,10 +152,6 @@ class Next extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.pass, (obj1, obj2) => {
             //document.getElementById("restartButton").style.display = "block";
             this.scene.start("Last")
-        });
-
-        this.physics.add.overlap(this.player, this.checkpoint, (obj1, obj2) => {
-            this.check = true;
         });
 
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
@@ -208,8 +246,23 @@ class Next extends Phaser.Scene {
             this.scene.pause();
             
             const restartBtn = document.getElementById("restartButton");
-            restartBtn.style.display = "block";
+            restartBtn.replaceWith(restartBtn.cloneNode(true));
+            const newRestartBtn = document.getElementById("restartButton");
+            newRestartBtn.style.display = "block";
+        
+            newRestartBtn.addEventListener("click", () => {
+                newRestartBtn.style.display = "none";
+            
+                const checkpointReached = localStorage.getItem('checkpointReached') === 'true';
+                
+                if (checkpointReached) {
+                    // Restart the Next scene (player will spawn at checkpoint)
+                    this.scene.start("Next");
+                } else {
+                    // No checkpoint reached, restart from the beginning
+                    this.scene.start("platformerScene");
+                }
+            });
         }
     }
-
 }

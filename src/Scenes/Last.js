@@ -11,20 +11,14 @@ class Last extends Phaser.Scene {
         this.JUMP_VELOCITY = -500;
         this.SCALE = 1.5;
         this.dead = false;
-        //this.inWaterTime = 0;
-       // this.waterDeathThreshold = 15000; // milliseconds
-        //this.waterYThreshold = 440;
 
         //for water
         this.inDangerZoneTime = 0;
         this.dangerZoneThreshold = 1500; // milliseconds
         this.yThreshold = 387;
-
-
     }
     
     create() {
-        
         // Create a new tilemap game object which uses 18x18 pixel tiles, and is
         // 45 tiles wide and 25 tiles tall.
         this.map = this.add.tilemap("Last", 18, 18, 70, 25);
@@ -47,8 +41,6 @@ class Last extends Phaser.Scene {
 
         this.waterLayer = this.map.createLayer("WaterLayer", this.tileset, 0, 0);
         this.waterLayer.setCollisionByExclusion([-1]); // All tiles collide except empty
-
-
         
         this.coins = this.map.createFromObjects("Objects", {
             name: "coin",
@@ -76,11 +68,7 @@ class Last extends Phaser.Scene {
         }
         
         this.physics.world.enable(this.coins, Phaser.Physics.Arcade.STATIC_BODY);
-       
-       
         this.physics.world.enable(this.flag, Phaser.Physics.Arcade.STATIC_BODY);
-
-        
         
         // Create a Phaser group out of the array this.coins
         // This will be used for collision detection below.
@@ -98,15 +86,12 @@ class Last extends Phaser.Scene {
             this.handleDeath();
         });
 
-        
-
         // Enable collision handling
         this.physics.add.collider(this.player, this.groundLayer);
 
         // set up Phaser-provided cursor key input
         this.cursors = this.input.keyboard.createCursorKeys();
 
-        
         this.physics.add.overlap(this.player, this.coinGroup, (obj1, obj2) => {
             obj2.destroy(); // remove coin on overlap
         });
@@ -123,21 +108,23 @@ class Last extends Phaser.Scene {
                 });
 
                 this.scene.pause();
-                document.getElementById("restartButton").style.display = "block";
+                
+                const restartBtn = document.getElementById("restartButton");
+                restartBtn.replaceWith(restartBtn.cloneNode(true));
+                const newRestartBtn = document.getElementById("restartButton");
+                newRestartBtn.style.display = "block";
+
+                newRestartBtn.addEventListener("click", () => {
+                    // Clear checkpoint data when game is completed
+                    localStorage.removeItem('checkpointReached');
+                    localStorage.removeItem('checkpointX');
+                    localStorage.removeItem('checkpointY');
+
+                    newRestartBtn.style.display = "none";
+                    this.scene.start("platformerScene");
+                });
             }
         });
-
-        /// Only show restart when level is completed
-        const restartBtn = document.getElementById("restartButton");
-        restartBtn.replaceWith(restartBtn.cloneNode(true));  // Remove any previous listeners
-        const newRestartBtn = document.getElementById("restartButton");
-
-        newRestartBtn.addEventListener("click", () => {
-            newRestartBtn.style.display = "none";  // Hide the button again
-            this.scene.start("platformerScene");                  // Restart the level
-        });
-
-        
 
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.cameras.main.startFollow(this.player, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY])
@@ -158,9 +145,6 @@ class Last extends Phaser.Scene {
             scale: { start: 0.5, end: 0 },
             emitting: false
         });
-
-        
-        
     }
 
     update() {
@@ -213,10 +197,6 @@ class Last extends Phaser.Scene {
         } else {
             this.inDangerZoneTime = 0; // reset timer if player is safe
         }
-        
-
-        
-
     }
 
     spawnMeteor(){
@@ -245,8 +225,23 @@ class Last extends Phaser.Scene {
             this.scene.pause();
     
             const restartBtn = document.getElementById("restartButton");
-            restartBtn.style.display = "block";
+            restartBtn.replaceWith(restartBtn.cloneNode(true));
+            const newRestartBtn = document.getElementById("restartButton");
+            newRestartBtn.style.display = "block";
+
+            newRestartBtn.addEventListener("click", () => {
+                newRestartBtn.style.display = "none";
+                
+                const checkpointReached = localStorage.getItem('checkpointReached') === 'true';
+                
+                if (checkpointReached) {
+                    // Player reached checkpoint in Next scene, respawn there
+                    this.scene.start("Next");
+                } else {
+                    // No checkpoint reached, restart from the very beginning
+                    this.scene.start("platformerScene");
+                }
+            });
         }
     }
-    
 }
