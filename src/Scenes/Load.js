@@ -14,9 +14,24 @@ class Load extends Phaser.Scene {
     
         
         this.load.audio('jump', 'pixel-jump.mp3');
+        this.load.audio('checkpointer', 'checkpoint.mp3');
+        this.load.audio('gameOver', 'gameover.mp3');
+        this.load.audio('complete', 'finished.mp3');
 
         // Load tilemap information
         this.load.image("tilemap_tiles", "tilemap_packed.png");
+        
+
+        this.load.spritesheet("bg_elements", "bgElements_spritesheet.png", {
+            frameWidth: 18,  // Adjust this to match your background tile size
+            frameHeight: 18  // Adjust this to match your background tile size
+        });
+        
+        this.load.spritesheet("bg_packed", "tilemap-backgrounds_packed.png", {
+            frameWidth: 18,  // Adjust this to match your background tile size  
+            frameHeight: 18  // Adjust this to match your background tile size
+        });
+
 
         //Load Meteor
         this.load.image("meteor", "meteor.png");

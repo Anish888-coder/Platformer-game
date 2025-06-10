@@ -31,14 +31,14 @@ class Platformer extends Phaser.Scene {
         //Title Text
         this.add.text(150, 150, "Welcome to Meteor Trouble by Anish Bansal", {
             fontSize: '16px',
-            fill: '#ffffff'
+            fill: '#000000'
         });
 
 
         //tutorial
         this.add.text(150, 200, "Dodge meteors and don't stay in the water for too long!", {
             fontSize: '16px',
-            fill: '#ffffff'
+            fill: '#000000'
         });
 
         // Make it collidable

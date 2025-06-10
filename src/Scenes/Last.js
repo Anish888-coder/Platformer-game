@@ -26,8 +26,17 @@ class Last extends Phaser.Scene {
         // First parameter: name we gave the tileset in Tiled
         // Second parameter: key for the tilesheet (from this.load.image in Load.js)
         this.tileset = this.map.addTilesetImage("tilemap_packed", "tilemap_tiles");
-        
 
+        // Background tilesets
+        this.bgTileset1 = this.map.addTilesetImage("bgElements_spritesheet", "bg_elements");
+        this.bgTileset2 = this.map.addTilesetImage("tilemap-backgrounds_packed", "bg_packed");
+        
+        // Create background layers FIRST (so they appear behind everything)
+        // Background 2 is furthest back
+        this.background2Layer = this.map.createLayer("Background 2", this.bgTileset2, 0, 0);
+        
+        // Background is in front of Background 2 but behind gameplay elements
+        this.backgroundLayer = this.map.createLayer("Background", this.bgTileset1, 0, 0);
         //jump sound
         this.jumpSound = this.sound.add('jump');
 
@@ -42,6 +51,14 @@ class Last extends Phaser.Scene {
         this.waterLayer = this.map.createLayer("WaterLayer", this.tileset, 0, 0);
         this.waterLayer.setCollisionByExclusion([-1]); // All tiles collide except empty
         
+
+        //Set depth values to ensure proper layering
+        if (this.background2Layer) this.background2Layer.setDepth(-2);
+        if (this.backgroundLayer) this.backgroundLayer.setDepth(-1);
+        this.groundLayer.setDepth(0);
+        this.waterLayer.setDepth(1);
+
+
         this.coins = this.map.createFromObjects("Objects", {
             name: "coin",
             key: "tilemap_sheet",
@@ -104,7 +121,7 @@ class Last extends Phaser.Scene {
 
                 this.add.text(this.player.x - 150, this.player.y - 50, "You Win!", {
                     fontSize: '32px',
-                    fill: '#ffffff'
+                    fill: '#000000'
                 });
 
                 this.scene.pause();
@@ -219,7 +236,7 @@ class Last extends Phaser.Scene {
             this.player.anims.play('idle');
             this.add.text(this.player.x - 50, this.player.y - 50, "Game Over", {
                 fontSize: '32px',
-                fill: '#ffffff'
+                fill: '#000000'
             });
 
             this.scene.pause();
