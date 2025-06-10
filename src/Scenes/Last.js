@@ -11,8 +11,9 @@ class Last extends Phaser.Scene {
         this.JUMP_VELOCITY = -900;
         this.SCALE = 1.5;
     }
-
+    
     create() {
+        
         // Create a new tilemap game object which uses 18x18 pixel tiles, and is
         // 45 tiles wide and 25 tiles tall.
         this.map = this.add.tilemap("Last", 18, 18, 70, 25);
@@ -28,7 +29,6 @@ class Last extends Phaser.Scene {
         // Create a layer
         this.groundLayer = this.map.createLayer("Ground-n-Platforms", this.tileset, 0, 0);
         
-
         // Make it collidable
         this.groundLayer.setCollisionByProperty({
             collides: true
@@ -41,27 +41,32 @@ class Last extends Phaser.Scene {
             frame: 151
         });
 
-        
-        this.flagA = this.map.createFromObjects("Objects", {
-            name: "FlagA",
+        this.flag = this.map.createFromObjects("Objects", {
+            name: "flag",
             key: "tilemap_sheet",
-            frame: 111
-        });
-        
+            frame: 112
+        });        
         
 
         this.physics.world.enable(this.coins, Phaser.Physics.Arcade.STATIC_BODY);
-        this.physics.world.enable(this.flagA, Phaser.Physics.Arcade.STATIC_BODY);
+       
+       
+        this.physics.world.enable(this.flag, Phaser.Physics.Arcade.STATIC_BODY);
 
+        
+        
         // Create a Phaser group out of the array this.coins
         // This will be used for collision detection below.
         this.coinGroup = this.add.group(this.coins);
+
 
         // set up player avatar
         this.player = this.physics.add.sprite(400, 300, "platformer_characters", 0);
         
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.player.setCollideWorldBounds(true);
+
+        
 
         // Enable collision handling
         this.physics.add.collider(this.player, this.groundLayer);
@@ -74,8 +79,11 @@ class Last extends Phaser.Scene {
             obj2.destroy(); // remove coin on overlap
         });
 
+        
+
         // When player reaches the flag
-        this.physics.add.overlap(this.player, this.flagA, (obj1, obj2) => {
+        this.physics.add.overlap(this.player, this.flag, (obj1, obj2) => {
+            console.log("restart time");
             document.getElementById("restartButton").style.display = "block";
         });
 
@@ -110,6 +118,8 @@ class Last extends Phaser.Scene {
             scale: { start: 0.5, end: 0 },
             emitting: false
         });
+
+        
         
     }
 
@@ -147,8 +157,7 @@ class Last extends Phaser.Scene {
         this.jumpSound.play();
     }
 
-
-    ///end check    
+   
 
     }
 

@@ -42,16 +42,16 @@ class Platformer extends Phaser.Scene {
         });
 
         
-        this.flagA = this.map.createFromObjects("Objects", {
-            name: "FlagA",
+        this.pass = this.map.createFromObjects("Objects", {
+            name: "pass",
             key: "tilemap_sheet",
-            frame: 111
+            frame: 88
         });
         
         
 
         this.physics.world.enable(this.coins, Phaser.Physics.Arcade.STATIC_BODY);
-        this.physics.world.enable(this.flagA, Phaser.Physics.Arcade.STATIC_BODY);
+        this.physics.world.enable(this.pass, Phaser.Physics.Arcade.STATIC_BODY);
 
         // Create a Phaser group out of the array this.coins
         // This will be used for collision detection below.
@@ -75,7 +75,7 @@ class Platformer extends Phaser.Scene {
         });
 
         // When player reaches the flag
-        this.physics.add.overlap(this.player, this.flagA, (obj1, obj2) => {
+        this.physics.add.overlap(this.player, this.pass, (obj1, obj2) => {
             //document.getElementById("restartButton").style.display = "block";
             this.scene.start("Next");
         });
