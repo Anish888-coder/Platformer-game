@@ -268,7 +268,7 @@ class Last extends Phaser.Scene {
                 // Method 1: Try to access Next class directly
                 if (typeof Next !== 'undefined' && Next.checkpointData && Next.checkpointData.reached) {
                     checkpointReached = true;
-                    console.log("Checkpoint found via Next class");
+                    //console.log("Checkpoint found via Next class");
                 }
                 
                 // Method 2: Check via scene manager
@@ -277,28 +277,28 @@ class Last extends Phaser.Scene {
                         const nextScene = this.scene.get('Next');
                         if (nextScene && nextScene.constructor.checkpointData && nextScene.constructor.checkpointData.reached) {
                             checkpointReached = true;
-                            console.log("Checkpoint found via scene manager");
+                            //console.log("Checkpoint found via scene manager");
                         }
                     } catch (e) {
-                        console.log("Scene manager method failed:", e);
+                        //console.log("Scene manager method failed:", e);
                     }
                 }
                 
                 // Method 3: Check global window object (fallback)
                 if (!checkpointReached && window.NextCheckpointData && window.NextCheckpointData.reached) {
                     checkpointReached = true;
-                    console.log("Checkpoint found via global object");
+                    //console.log("Checkpoint found via global object");
                 }
                 
                 console.log("Final checkpoint status:", checkpointReached);
                 
                 if (checkpointReached) {
                     // Player reached checkpoint in Next scene, respawn there
-                    console.log("Restarting at Next scene checkpoint");
+                    //console.log("Restarting at Next scene checkpoint");
                     this.scene.start("Next");
                 } else {
                     // No checkpoint reached, restart from the very beginning
-                    console.log("Restarting from platformer scene");
+                    //console.log("Restarting from platformer scene");
                     this.scene.start("platformerScene");
                 }
             });
