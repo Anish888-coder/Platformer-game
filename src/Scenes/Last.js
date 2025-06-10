@@ -141,9 +141,12 @@ class Last extends Phaser.Scene {
 
                 newRestartBtn.addEventListener("click", () => {
                     // Clear checkpoint data when game is completed
-                    localStorage.removeItem('checkpointReached');
-                    localStorage.removeItem('checkpointX');
-                    localStorage.removeItem('checkpointY');
+                    // Import the Next scene to access its static data
+                    if (typeof Next !== 'undefined') {
+                        Next.checkpointData.reached = false;
+                        Next.checkpointData.x = 0;
+                        Next.checkpointData.y = 0;
+                    }
 
                     newRestartBtn.style.display = "none";
                     this.scene.start("platformerScene");
@@ -259,13 +262,43 @@ class Last extends Phaser.Scene {
             newRestartBtn.addEventListener("click", () => {
                 newRestartBtn.style.display = "none";
                 
-                const checkpointReached = localStorage.getItem('checkpointReached') === 'true';
+                // Multiple ways to check for checkpoint data
+                let checkpointReached = false;
+                
+                // Method 1: Try to access Next class directly
+                if (typeof Next !== 'undefined' && Next.checkpointData && Next.checkpointData.reached) {
+                    checkpointReached = true;
+                    console.log("Checkpoint found via Next class");
+                }
+                
+                // Method 2: Check via scene manager
+                if (!checkpointReached) {
+                    try {
+                        const nextScene = this.scene.get('Next');
+                        if (nextScene && nextScene.constructor.checkpointData && nextScene.constructor.checkpointData.reached) {
+                            checkpointReached = true;
+                            console.log("Checkpoint found via scene manager");
+                        }
+                    } catch (e) {
+                        console.log("Scene manager method failed:", e);
+                    }
+                }
+                
+                // Method 3: Check global window object (fallback)
+                if (!checkpointReached && window.NextCheckpointData && window.NextCheckpointData.reached) {
+                    checkpointReached = true;
+                    console.log("Checkpoint found via global object");
+                }
+                
+                console.log("Final checkpoint status:", checkpointReached);
                 
                 if (checkpointReached) {
                     // Player reached checkpoint in Next scene, respawn there
+                    console.log("Restarting at Next scene checkpoint");
                     this.scene.start("Next");
                 } else {
                     // No checkpoint reached, restart from the very beginning
+                    console.log("Restarting from platformer scene");
                     this.scene.start("platformerScene");
                 }
             });
