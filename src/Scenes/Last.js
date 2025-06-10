@@ -65,15 +65,16 @@ class Last extends Phaser.Scene {
         // Create group to manage all meteors
         this.meteorGroup = this.physics.add.group();
 
-        // Spawn meteors every 2 seconds
-        this.time.addEvent({
-            delay: 2000, // milliseconds
-            callback: this.spawnMeteor,
-            callbackScope: this,
-            loop: true
-        });
+        if (!this.hasWon && !this.dead){
+           // Spawn meteors every 2 seconds
+            this.time.addEvent({
+                delay: 2000, // milliseconds
+                callback: this.spawnMeteor,
+                callbackScope: this,
+                loop: true
+            }); 
+        }
         
-
         this.physics.world.enable(this.coins, Phaser.Physics.Arcade.STATIC_BODY);
        
        
@@ -110,12 +111,20 @@ class Last extends Phaser.Scene {
             obj2.destroy(); // remove coin on overlap
         });
 
-        
+        this.hasWon = false;
 
-        // When player reaches the flag
         this.physics.add.overlap(this.player, this.flag, (obj1, obj2) => {
-            console.log("restart time");
-            document.getElementById("restartButton").style.display = "block";
+            if (!this.hasWon) {
+                this.hasWon = true;
+
+                this.add.text(this.player.x - 150, this.player.y - 50, "You Win!", {
+                    fontSize: '32px',
+                    fill: '#ffffff'
+                });
+
+                this.scene.pause();
+                document.getElementById("restartButton").style.display = "block";
+            }
         });
 
         /// Only show restart when level is completed
@@ -232,6 +241,8 @@ class Last extends Phaser.Scene {
                 fontSize: '32px',
                 fill: '#ffffff'
             });
+
+            this.scene.pause();
     
             const restartBtn = document.getElementById("restartButton");
             restartBtn.style.display = "block";

@@ -205,6 +205,8 @@ class Next extends Phaser.Scene {
                 fill: '#ffffff'
             });
     
+            this.scene.pause();
+            
             const restartBtn = document.getElementById("restartButton");
             restartBtn.style.display = "block";
         }
