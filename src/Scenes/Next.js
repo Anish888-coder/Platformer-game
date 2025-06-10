@@ -15,7 +15,7 @@ class Next extends Phaser.Scene {
     create() {
         // Create a new tilemap game object which uses 18x18 pixel tiles, and is
         // 45 tiles wide and 25 tiles tall.
-        this.map = this.add.tilemap("platformer-level-1", 18, 18, 70, 25);
+        this.map = this.add.tilemap("Next", 18, 18, 70, 25);
         // Add a tileset to the map
         // First parameter: name we gave the tileset in Tiled
         // Second parameter: key for the tilesheet (from this.load.image in Load.js)
@@ -58,7 +58,7 @@ class Next extends Phaser.Scene {
         this.coinGroup = this.add.group(this.coins);
 
         // set up player avatar
-        this.player = this.physics.add.sprite(400, 300, "platformer_characters", 0);
+        this.player = this.physics.add.sprite(25, 10, "platformer_characters", 0);
         
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.player.setCollideWorldBounds(true);
