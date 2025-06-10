@@ -15,7 +15,7 @@ class Last extends Phaser.Scene {
     create() {
         // Create a new tilemap game object which uses 18x18 pixel tiles, and is
         // 45 tiles wide and 25 tiles tall.
-        this.map = this.add.tilemap("platformer-level-1", 18, 18, 70, 25);
+        this.map = this.add.tilemap("Last", 18, 18, 70, 25);
         // Add a tileset to the map
         // First parameter: name we gave the tileset in Tiled
         // Second parameter: key for the tilesheet (from this.load.image in Load.js)
