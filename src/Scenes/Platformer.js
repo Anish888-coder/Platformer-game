@@ -22,6 +22,17 @@ class Platformer extends Phaser.Scene {
         this.tileset = this.map.addTilesetImage("tilemap_packed", "tilemap_tiles");
         
 
+        // Background tilesets
+        this.bgTileset1 = this.map.addTilesetImage("bgElements_spritesheet", "bg_elements");
+        this.bgTileset2 = this.map.addTilesetImage("tilemap-backgrounds_packed", "bg_packed");
+
+        // Create background layers FIRST (so they appear behind everything)
+        // Background 2 is furthest back
+        this.background2Layer = this.map.createLayer("Background 2", this.bgTileset2, 0, 0);
+        
+        // Background is in front of Background 2 but behind gameplay elements
+        this.backgroundLayer = this.map.createLayer("Background", this.bgTileset1, 0, 0);
+
         //jump sound
         this.jumpSound = this.sound.add('jump');
 
@@ -70,7 +81,7 @@ class Platformer extends Phaser.Scene {
         this.coinGroup = this.add.group(this.coins);
 
         // set up player avatar
-        this.player = this.physics.add.sprite(400, 300, "platformer_characters", 0);
+        this.player = this.physics.add.sprite(10, 25, "platformer_characters", 0);
         
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.player.setCollideWorldBounds(true);

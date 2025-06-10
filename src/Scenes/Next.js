@@ -80,7 +80,7 @@ class Next extends Phaser.Scene {
         this.checkpoint = this.map.createFromObjects("Objects", {
             name: "checkpoint",  // This should match the name in your Tiled map
             key: "tilemap_sheet",
-            frame: 152  // Use the correct frame number for your checkpoint tile
+            frame: 112 
         });
 
         // set up player avatar
